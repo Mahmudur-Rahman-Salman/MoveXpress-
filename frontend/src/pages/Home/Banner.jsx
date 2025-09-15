@@ -11,7 +11,7 @@ import banner3 from "../../assets/banner3.png";
 const Banner = () => {
   return (
     <>
-      <Carousel>
+      <Carousel autoPlay={true} infiniteLoop={true} interval={2000} showThumbs={false}> 
         <div>
           <img src={banner1} />
           <p className="legend">Legend 1</p>

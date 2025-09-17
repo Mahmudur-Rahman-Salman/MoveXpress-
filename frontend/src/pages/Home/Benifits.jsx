@@ -1,5 +1,3 @@
-import React from "react";
-
 import rider1 from "../../assets/delivery rider.jpg";
 import rider2 from "../../assets/delivery rider2.png";
 import customer from "../../assets/cutomer.png";

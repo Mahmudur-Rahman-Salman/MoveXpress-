@@ -3,6 +3,8 @@ import Banner from "./Banner";
 import OurServices from "./OurServices";
 import ClientLogosMarque from "./ClientLogosMarque";
 import Benifits from "./Benifits";
+import Bemarchant from "./Bemarchant";
+import Reviews from "./Reviews";
 
 const Home = () => {
   return (
@@ -11,6 +13,8 @@ const Home = () => {
       <OurServices></OurServices>
       <ClientLogosMarque></ClientLogosMarque>
       <Benifits></Benifits>
+      <Bemarchant></Bemarchant>
+      <Reviews></Reviews>
     </>
   );
 };

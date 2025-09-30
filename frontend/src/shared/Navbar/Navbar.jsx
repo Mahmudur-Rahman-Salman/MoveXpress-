@@ -1,7 +1,17 @@
 import React from "react";
 import { Link } from "react-router";
+import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
+  const { logOut, user } = useAuth();
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      console.log("User logged out");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
   return (
     <>
       <div className="navbar bg-base-100 shadow-sm">
@@ -39,7 +49,7 @@ const Navbar = () => {
                 <Link to="/about">About</Link>
               </li>
               <li>
-                <Link to="/Contact Us">Contact</Link>
+                <Link to="/coverage">Coverage</Link>
               </li>
             </ul>
           </div>
@@ -85,6 +95,17 @@ const Navbar = () => {
               <span className="badge badge-xs badge-primary indicator-item"></span>
             </div>
           </button>
+         {
+          user ? (
+            <button className="btn btn-outline ml-2" onClick={handleLogout}>
+              Logout
+            </button>
+          ) : (
+            <Link to="/login" className="btn btn-outline ml-2">
+              Login
+            </Link>
+          )
+         }
         </div>
       </div>
     </>

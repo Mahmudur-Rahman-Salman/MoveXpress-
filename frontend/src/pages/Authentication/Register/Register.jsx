@@ -1,21 +1,23 @@
 import React from "react";
+
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
 
-const Login = () => {
+const Register = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const { signInUser } = useAuth();
+  const { createUser } = useAuth();
 
   const onSubmit = (data) => {
     // console.log(data);
-    signInUser(data.email, data.password)
+    console.log(createUser);
+    createUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
       })
@@ -30,7 +32,7 @@ const Login = () => {
         className="w-full flex flex-col items-center justify-center"
       >
         <h2 className="text-3xl md:text-4xl text-gray-900 font-semibold text-center">
-          Sign in
+          Sign up
         </h2>
         <p className="text-sm text-gray-500/90 mt-3 text-center">
           Welcome back! Please sign in to continue
@@ -41,7 +43,7 @@ const Login = () => {
         <div className="flex items-center gap-4 w-full my-5">
           <div className="flex-1 h-px bg-gray-300/90"></div>
           <p className="text-nowrap text-sm text-gray-500/90">
-            or sign in with email
+            or sign up with email
           </p>
           <div className="flex-1 h-px bg-gray-300/90"></div>
         </div>
@@ -90,17 +92,17 @@ const Login = () => {
           type="submit"
           className="mt-8 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity"
         >
-          Login
+          sign up
         </button>
         {/* Sign up link */}
         <p className="text-gray-500/90 text-sm mt-4 text-center">
           Don’t have an account?{" "}
           <Link
-            to="/register"
+            to="/login"
             className="text-indigo-500 hover:underline"
             href="#"
           >
-            Sign up
+            Sign in
           </Link>
         </p>
       </form>
@@ -108,4 +110,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

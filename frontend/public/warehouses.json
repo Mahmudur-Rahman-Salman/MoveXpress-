@@ -1,0 +1,365 @@
+[
+  {
+    "region": "Dhaka",
+    "district": "Dhaka",
+    "city": "Dhaka City",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.8103,
+    "longitude": 90.4125
+  },
+  {
+    "region": "Dhaka",
+    "district": "Faridpur",
+    "city": "Faridpur",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.607,
+    "longitude": 89.842
+  },
+  {
+    "region": "Dhaka",
+    "district": "Gazipur",
+    "city": "Gazipur",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 24.0023,
+    "longitude": 90.4266
+  },
+  {
+    "region": "Dhaka",
+    "district": "Gopalganj",
+    "city": "Gopalganj",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.005,
+    "longitude": 89.8266
+  },
+  {
+    "region": "Dhaka",
+    "district": "Kishoreganj",
+    "city": "Kishoreganj",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 24.4449,
+    "longitude": 90.7766
+  },
+  {
+    "region": "Dhaka",
+    "district": "Madaripur",
+    "city": "Madaripur",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.1641,
+    "longitude": 90.189
+  },
+  {
+    "region": "Dhaka",
+    "district": "Manikganj",
+    "city": "Manikganj",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.8617,
+    "longitude": 90.001
+  },
+  {
+    "region": "Dhaka",
+    "district": "Munshiganj",
+    "city": "Munshiganj",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.5422,
+    "longitude": 90.5305
+  },
+  {
+    "region": "Dhaka",
+    "district": "Narayanganj",
+    "city": "Narayanganj",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.6238,
+    "longitude": 90.5
+  },
+  {
+    "region": "Dhaka",
+    "district": "Narsingdi",
+    "city": "Narsingdi",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.923,
+    "longitude": 90.717
+  },
+  {
+    "region": "Dhaka",
+    "district": "Rajbari",
+    "city": "Rajbari",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.757,
+    "longitude": 89.644
+  },
+  {
+    "region": "Dhaka",
+    "district": "Shariatpur",
+    "city": "Shariatpur",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.2423,
+    "longitude": 90.4348
+  },
+  {
+    "region": "Dhaka",
+    "district": "Tangail",
+    "city": "Tangail",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 24.2513,
+    "longitude": 89.9167
+  },
+
+  {
+    "region": "Chattogram",
+    "district": "Bandarban",
+    "city": "Bandarban",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Hill Delivery",
+    "latitude": 22.1953,
+    "longitude": 92.2184
+  },
+  {
+    "region": "Chattogram",
+    "district": "Brahmanbaria",
+    "city": "Brahmanbaria",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.9571,
+    "longitude": 91.111
+  },
+  {
+    "region": "Chattogram",
+    "district": "Chandpur",
+    "city": "Chandpur",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.2333,
+    "longitude": 90.65
+  },
+  {
+    "region": "Chattogram",
+    "district": "Chattogram",
+    "city": "Chattogram City",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Port Delivery",
+    "latitude": 22.3569,
+    "longitude": 91.7832
+  },
+  {
+    "region": "Chattogram",
+    "district": "Cumilla",
+    "city": "Cumilla",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.457,
+    "longitude": 91.2049
+  },
+  {
+    "region": "Chattogram",
+    "district": "Cox’s Bazar",
+    "city": "Cox’s Bazar",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Tourist Process",
+    "latitude": 21.4272,
+    "longitude": 92.0058
+  },
+  {
+    "region": "Chattogram",
+    "district": "Feni",
+    "city": "Feni",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 23.0159,
+    "longitude": 91.3976
+  },
+  {
+    "region": "Chattogram",
+    "district": "Khagrachari",
+    "city": "Khagrachari",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Hill Delivery",
+    "latitude": 23.1193,
+    "longitude": 91.9847
+  },
+  {
+    "region": "Chattogram",
+    "district": "Lakshmipur",
+    "city": "Lakshmipur",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 22.946,
+    "longitude": 90.834
+  },
+  {
+    "region": "Chattogram",
+    "district": "Noakhali",
+    "city": "Noakhali",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 22.8696,
+    "longitude": 91.0995
+  },
+  {
+    "region": "Chattogram",
+    "district": "Rangamati",
+    "city": "Rangamati",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Hill Delivery",
+    "latitude": 22.7324,
+    "longitude": 92.2985
+  },
+
+  {
+    "region": "Sylhet",
+    "district": "Habiganj",
+    "city": "Habiganj",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Tea Garden",
+    "latitude": 24.374,
+    "longitude": 91.4155
+  },
+  {
+    "region": "Sylhet",
+    "district": "Moulvibazar",
+    "city": "Moulvibazar",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Tea Garden",
+    "latitude": 24.4829,
+    "longitude": 91.7774
+  },
+  {
+    "region": "Sylhet",
+    "district": "Sunamganj",
+    "city": "Sunamganj",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Haor Delivery",
+    "latitude": 25.0658,
+    "longitude": 91.395
+  },
+  {
+    "region": "Sylhet",
+    "district": "Sylhet",
+    "city": "Sylhet City",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 24.8949,
+    "longitude": 91.8687
+  },
+
+  {
+    "region": "Rajshahi",
+    "district": "Bogura",
+    "city": "Bogura",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 24.8465,
+    "longitude": 89.3778
+  },
+  {
+    "region": "Rajshahi",
+    "district": "Joypurhat",
+    "city": "Joypurhat",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 25.0968,
+    "longitude": 89.0227
+  },
+  {
+    "region": "Rajshahi",
+    "district": "Naogaon",
+    "city": "Naogaon",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 24.8015,
+    "longitude": 88.9414
+  },
+  {
+    "region": "Rajshahi",
+    "district": "Natore",
+    "city": "Natore",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 24.4137,
+    "longitude": 89.0056
+  },
+  {
+    "region": "Rajshahi",
+    "district": "Chapai Nawabganj",
+    "city": "Chapai Nawabganj",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Border Delivery",
+    "latitude": 24.5965,
+    "longitude": 88.2776
+  },
+  {
+    "region": "Rajshahi",
+    "district": "Pabna",
+    "city": "Pabna",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 24.0064,
+    "longitude": 89.2372
+  },
+  {
+    "region": "Rajshahi",
+    "district": "Rajshahi",
+    "city": "Rajshahi City",
+    "covered_area": "Full",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 24.3745,
+    "longitude": 88.6042
+  },
+  {
+    "region": "Rajshahi",
+    "district": "Sirajganj",
+    "city": "Sirajganj",
+    "covered_area": "Partial",
+    "status": "Active",
+    "flowchart": "Standard Process",
+    "latitude": 24.457,
+    "longitude": 89.708
+  }
+]

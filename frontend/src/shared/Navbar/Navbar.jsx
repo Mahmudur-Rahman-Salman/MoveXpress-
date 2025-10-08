@@ -51,6 +51,9 @@ const Navbar = () => {
               <li>
                 <Link to="/coverage">Coverage</Link>
               </li>
+               <li>
+                <Link to="/sendparcel">Send Parcel</Link>
+              </li>
             </ul>
           </div>
         </div>

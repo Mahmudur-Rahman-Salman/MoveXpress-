@@ -1,8 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const {
@@ -12,15 +13,40 @@ const Login = () => {
   } = useForm();
 
   const { signInUser } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Redirect path (where user came from or default "/")
+  const from = location.state?.from?.pathname || "/";
 
   const onSubmit = (data) => {
-    // console.log(data);
     signInUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
+
+        // ✅ SweetAlert2 popup
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful!",
+          text: "Welcome back!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        // ✅ Redirect after short delay (to show alert first)
+        setTimeout(() => {
+          navigate(from, { replace: true });
+        }, 1500);
       })
       .catch((error) => {
         console.log(error.message);
+
+        // ❌ Error alert
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: error.message,
+        });
       });
   };
   return (

@@ -75,7 +75,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient, ObjectId, ServerApiVersion } from "mongodb";
 
 dotenv.config();
 const app = express();
@@ -161,6 +161,26 @@ async function run() {
         res.status(500).send({ message: "Failed to save parcel" });
       }
     });
+
+    // DELETE a parcel by ID
+ app.delete("/parcels/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const userEmail = req.query.email; // Example: /parcels/:id?email=user@gmail.com
+
+    const query = { _id: new ObjectId(id), created_by: userEmail };
+    const result = await parcelCollection.deleteOne(query);
+
+    if (result.deletedCount === 0) {
+      return res.status(404).send({ message: "Parcel not found or not authorized" });
+    }
+
+    res.send({ message: "Parcel deleted successfully", deletedCount: result.deletedCount });
+  } catch (error) {
+    console.error("Error deleting parcel:", error);
+    res.status(500).send({ message: "Failed to delete parcel" });
+  }
+});
 
     // Start server after DB connection
     app.listen(port, () => {

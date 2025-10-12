@@ -14,13 +14,13 @@ const MyParcels = () => {
       const res = await axiosSecure.get(`/parcels?email=${user?.email}`);
       return res.data;
     },
-   // enabled: !!user?.email, // Only run the query if user email is available
+    // enabled: !!user?.email, // Only run the query if user email is available
   });
   console.log(parcels);
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-10 mx-auto">
+      <div className="flex justify-center items-center py-10">
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );

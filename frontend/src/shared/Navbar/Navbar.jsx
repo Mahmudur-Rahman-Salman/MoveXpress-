@@ -51,9 +51,14 @@ const Navbar = () => {
               <li>
                 <Link to="/coverage">Coverage</Link>
               </li>
-               <li>
+              <li>
                 <Link to="/sendparcel">Send Parcel</Link>
               </li>
+              {user && (
+                <li>
+                  <Link to="/dashboard">Dashboard</Link>
+                </li>
+              )}
             </ul>
           </div>
         </div>
@@ -98,8 +103,7 @@ const Navbar = () => {
               <span className="badge badge-xs badge-primary indicator-item"></span>
             </div>
           </button>
-         {
-          user ? (
+          {user ? (
             <button className="btn btn-outline ml-2" onClick={handleLogout}>
               Logout
             </button>
@@ -107,8 +111,7 @@ const Navbar = () => {
             <Link to="/login" className="btn btn-outline ml-2">
               Login
             </Link>
-          )
-         }
+          )}
         </div>
       </div>
     </>

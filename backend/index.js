@@ -98,7 +98,6 @@ const client = new MongoClient(uri, {
 
 // Define the database and collection
 
-
 async function run() {
   try {
     await client.connect();
@@ -119,6 +118,26 @@ async function run() {
       } catch (error) {
         console.error("Error fetching parcels:", error);
         res.status(500).send({ message: "Failed to fetch parcels" });
+      }
+    });
+
+    app.get("/parcels", async (req, res) => {
+      try {
+        const userEmail = req.query.email;
+
+        // Match your database field name correctly
+        const query = userEmail ? { userEmail } : {};
+
+        // Sort newest first
+        const options = {
+          sort: { creation_date: -1 },
+        };
+
+        const parcels = await parcelCollection.find(query, options).toArray();
+        res.status(200).send(parcels);
+      } catch (error) {
+        console.error("Error fetching parcels:", error);
+        res.status(500).send({ message: "Failed to get parcels" });
       }
     });
 

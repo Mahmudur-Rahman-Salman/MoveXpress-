@@ -44,7 +44,7 @@ const DashboardLayout = () => {
           ></label>
           <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
             {/* Sidebar content here */}
-            MoveXpress
+            <Link to="/" className="font-extrabold hover:bg-gray-400 p-2">MoveXpress</Link>
             <li>
               <Link to="/dashboard/myParcels">My Parcels</Link>
             </li>

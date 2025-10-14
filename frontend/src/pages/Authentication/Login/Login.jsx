@@ -55,6 +55,12 @@ const Login = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="w-full flex flex-col items-center justify-center"
       >
+        <Link
+          to="/"
+          className="font-extrabold text-3xl m-3 p-3 hover:bg-gray-100 "
+        >
+          Move<span className="text-amber-400">Xpress</span>
+        </Link>
         <h2 className="text-3xl md:text-4xl text-gray-900 font-semibold text-center">
           Sign in
         </h2>

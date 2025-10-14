@@ -63,7 +63,10 @@ const Navbar = () => {
           </div>
         </div>
         <div className="navbar-center">
-          <a className="btn btn-ghost text-xl">MoveXpress</a>
+          {/* <a className="btn btn-ghost text-xl">MoveXpress</a> */}
+          <Link to="/" className="font-extrabold text-xl m-3 p-3 hover:bg-gray-100 ">
+            Move<span className="text-amber-400">Xpress</span>
+          </Link>
         </div>
         <div className="navbar-end">
           <button className="btn btn-ghost btn-circle">

@@ -3,10 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 const MyParcels = () => {
   const { user, loading } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
 
   const { data: parcels = [], refetch } = useQuery({
     queryKey: ["my-parcels", user?.email],
@@ -34,6 +36,7 @@ const MyParcels = () => {
   const handlePay = (id) => {
     console.log("Proceed to payment for", id);
     // Implement your payment logic
+    navigate(`/dashboard/payment/${id}`);
   };
 
   const formatDate = (iso) => {
@@ -103,7 +106,7 @@ const MyParcels = () => {
                         : "badge-error"
                     }`}
                   >
-                    {parcel.payment_status}
+                    {parcel.payment_status === "paid" ? "Paid" : "Unpaid"}
                   </span>
                 </td>
                 <td className="space-x-2">
@@ -113,7 +116,8 @@ const MyParcels = () => {
                   >
                     View
                   </button>
-                  {parcel.payment_status === "unpaid" && (
+                  {(parcel.payment_status === "unpaid" ||
+                    !parcel.payment_status) && (
                     <button
                       onClick={() => handlePay(parcel._id)}
                       className="btn btn-xs btn-primary text-black"

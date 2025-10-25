@@ -1,81 +1,10 @@
-// import express from "express";
-// import cors from "cors";
-// import dotenv from "dotenv";
-// import mongoose from "mongoose";
-
-// dotenv.config();
-// const app = express();
-// // Load port from .env
-// const PORT = process.env.PORT || 5000;
-
-// // Middleware
-// app.use(cors());
-// app.use(express.json());
-
-// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.cf70q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-
-// const clientOptions = {
-//   serverApi: { version: "1", strict: true, deprecationErrors: true },
-// };
-
-// async function run() {
-//   try {
-//     // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
-//     await mongoose.connect(uri, clientOptions);
-
-//     // api creation
-//     const db = client.db("MoveXpress");
-//     const parcelsCollection = db.collection("parcels");
-
-//     // get api
-
-//     app.get("/parcels", async (_, res) => {
-//       const parcels = parcelsCollection.find().toArray();
-//       res.send(parcels);
-//     });
-
-//     // POST: Create a new parcel
-//     app.post("/parcels", async (req, res) => {
-//       try {
-//         const newParcel = req.body;
-//         newParcel.createdAt = new Date();
-//         const result = await parcelsCollection.insertOne(newParcel);
-//         res.status(201).send(result);
-//       } catch (error) {
-//         console.error("Error inserting parcel:", error);
-//         res.status(500).send({ message: "Failed to create parcel" });
-//       }
-//     });
-
-//     // Send a ping to confirm a successful connection');
-
-//     await mongoose.connection.db.admin().command({ ping: 1 });
-//     console.log(
-//       "Pinged your deployment. You successfully connected to MongoDB Database!"
-//     );
-//   } finally {
-//     // Ensures that the client will close when you finish/error
-//     await mongoose.disconnect();
-//   }
-// }
-// run().catch(console.dir);
-
-// // Basic route
-// app.get("/", (req, res) => {
-//   res.send("Parcel server is running...");
-// });
-
-// // Start server
-// app.listen(PORT, () => {
-//   console.log(`Parcel Server is running on port ${PORT}`);
-// });
-
 // // MoveXpress  AfpMSTS6LVOiGbQ9
 
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { MongoClient, ObjectId, ServerApiVersion } from "mongodb";
+import Stripe from "stripe";
 
 dotenv.config();
 const app = express();
@@ -84,6 +13,8 @@ const port = process.env.PORT || 5000;
 // middleware
 app.use(cors());
 app.use(express.json());
+
+const stripe = new Stripe(process.env.PAYMENT_GATEWAY_KEY);
 
 // MongoDB Connection
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.cf70q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -103,6 +34,7 @@ async function run() {
     await client.connect();
     const db = client.db("MoveXpress");
     const parcelCollection = db.collection("parcels");
+    const paymentsCollection = db.collection("payments");
     console.log("✅ Connected to MongoDB Database: MoveXpress");
 
     // Root route
@@ -141,7 +73,27 @@ async function run() {
       }
     });
 
-    // Save parcel info
+    // GET: Get a specific parcel by ID
+    app.get("/parcels/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+
+        const parcel = await parcelCollection.findOne({
+          _id: new ObjectId(id),
+        });
+
+        if (!parcel) {
+          return res.status(404).send({ message: "Parcel not found" });
+        }
+
+        res.send(parcel);
+      } catch (error) {
+        console.error("Error fetching parcel:", error);
+        res.status(500).send({ message: "Failed to fetch parcel" });
+      }
+    });
+
+    // GET: Get all parcels
     app.post("/parcels", async (req, res) => {
       try {
         const parcelData = req.body;
@@ -163,24 +115,89 @@ async function run() {
     });
 
     // DELETE a parcel by ID
- app.delete("/parcels/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const userEmail = req.query.email; // Example: /parcels/:id?email=user@gmail.com
+    app.delete("/parcels/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+        const userEmail = req.query.email; // Example: /parcels/:id?email=user@gmail.com
 
-    const query = { _id: new ObjectId(id), created_by: userEmail };
-    const result = await parcelCollection.deleteOne(query);
+        const query = { _id: new ObjectId(id), created_by: userEmail };
+        const result = await parcelCollection.deleteOne(query);
 
-    if (result.deletedCount === 0) {
-      return res.status(404).send({ message: "Parcel not found or not authorized" });
-    }
+        if (result.deletedCount === 0) {
+          return res
+            .status(404)
+            .send({ message: "Parcel not found or not authorized" });
+        }
 
-    res.send({ message: "Parcel deleted successfully", deletedCount: result.deletedCount });
-  } catch (error) {
-    console.error("Error deleting parcel:", error);
-    res.status(500).send({ message: "Failed to delete parcel" });
-  }
-});
+        res.send({
+          message: "Parcel deleted successfully",
+          deletedCount: result.deletedCount,
+        });
+      } catch (error) {
+        console.error("Error deleting parcel:", error);
+        res.status(500).send({ message: "Failed to delete parcel" });
+      }
+    });
+
+    // POST: Record payment and update parcel status
+    app.post("/payments", async (req, res) => {
+      try {
+        const { parcelId, email, amount, paymentMethod, transactionId } =
+          req.body;
+
+        // 1. Update parcel's payment_status
+        const updateResult = await parcelCollection.updateOne(
+          { _id: new ObjectId(parcelId) },
+          {
+            $set: {
+              payment_status: "paid",
+            },
+          }
+        );
+
+        if (updateResult.modifiedCount === 0) {
+          return res
+            .status(404)
+            .send({ message: "Parcel not found or already paid" });
+        }
+
+        // 2. Insert payment record
+        const paymentDoc = {
+          parcelId,
+          email,
+          amount,
+          paymentMethod,
+          transactionId,
+          paid_at_string: new Date().toISOString(),
+          paid_at: new Date(),
+        };
+
+        const paymentResult = await paymentsCollection.insertOne(paymentDoc);
+
+        res.status(201).send({
+          message: "Payment recorded and parcel marked as paid",
+          insertedId: paymentResult.insertedId,
+        });
+      } catch (error) {
+        console.error("Payment processing failed:", error);
+        res.status(500).send({ message: "Failed to record payment" });
+      }
+    });
+
+    app.post("/create-payment-intent", async (req, res) => {
+      const amountInCents = req.body.amountInCents;
+      try {
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: amountInCents, // Amount in cents
+          currency: "usd",
+          payment_method_types: ["card"],
+        });
+
+        res.json({ clientSecret: paymentIntent.client_secret });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
 
     // Start server after DB connection
     app.listen(port, () => {

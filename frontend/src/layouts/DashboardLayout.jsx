@@ -1,5 +1,12 @@
 import React from "react";
 import { Link, Outlet } from "react-router";
+import {
+  FaTruckMoving,
+  FaBoxOpen,
+  FaMoneyCheckAlt,
+  FaMapMarkedAlt,
+  FaUserEdit,
+} from "react-icons/fa";
 
 const DashboardLayout = () => {
   return (
@@ -44,9 +51,37 @@ const DashboardLayout = () => {
           ></label>
           <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
             {/* Sidebar content here */}
-            <Link to="/" className="font-extrabold hover:bg-gray-400 p-2">MoveXpress</Link>
+            <Link
+              to="/"
+              className="flex items-center gap-2 text-2xl font-extrabold mb-6 hover:text-primary transition"
+            >
+              <FaTruckMoving className="text-primary" />
+              MoveXpress
+            </Link>
             <li>
-              <Link to="/dashboard/myParcels">My Parcels</Link>
+              <Link to="/dashboard/myParcels">
+                {" "}
+                <FaBoxOpen className="text-lg" />
+                My Parcels
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard/paymentHistory">
+                <FaMoneyCheckAlt className="text-lg" />
+                Payment History
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard/track">
+                <FaMapMarkedAlt className="text-lg" />
+                Track a Package
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard/profile">
+                <FaUserEdit className="text-lg" />
+                Update Profile
+              </Link>
             </li>
           </ul>
         </div>

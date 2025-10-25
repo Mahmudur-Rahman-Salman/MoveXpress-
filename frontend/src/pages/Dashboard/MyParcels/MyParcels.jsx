@@ -18,7 +18,7 @@ const MyParcels = () => {
     },
     // enabled: !!user?.email, // Only run the query if user email is available
   });
-  console.log(parcels);
+  // console.log(parcels);
 
   if (loading) {
     return (

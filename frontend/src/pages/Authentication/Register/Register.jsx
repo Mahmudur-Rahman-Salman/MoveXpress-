@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import axios from "axios";
+import useAxios from "../../../hooks/useAxios";
 
 const Register = () => {
   const {
@@ -12,19 +14,62 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const { createUser } = useAuth();
+  const { createUser, updateUserProfile } = useAuth();
+
+  const [profilePic, setProfilePic] = useState("");
+  const axiosInstance = useAxios();
 
   const onSubmit = (data) => {
     // console.log(data);
-    console.log(createUser);
+    // console.log(createUser);
     createUser(data.email, data.password)
-      .then((result) => {
+      .then(async (result) => {
         console.log(result.user);
+
+        // update user info in the database
+        const userInfo = {
+          email: data.email,
+          roles: "user", //default role
+          created_at: new Date().toISOString(),
+          last_log_in: new Date().toISOString(),
+        };
+
+        const userRes = await axiosInstance.post("/users", userInfo);
+        console.log(userRes.data);
+        // update user profile
+        const userProfile = {
+          displayName: data.name,
+          photoURL: profilePic,
+        };
+
+        updateUserProfile(userProfile)
+          .then(() => {
+            console.log("Profile updated successfully");
+          })
+          .catch((error) => {
+            console.log("Error updating profile:", error);
+          });
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
+
+  const handleImageUpload = async (event) => {
+    const image = event.target.files[0];
+    console.log(image);
+    const formData = new FormData();
+    formData.append("image", image);
+    const res = await axios.post(
+      `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_image_upload_key
+      }`,
+      formData
+    );
+    setProfilePic(res.data.data.display_url);
+    console.log(res.data.data.display_url);
+  };
+
   return (
     <>
       <form
@@ -52,6 +97,35 @@ const Register = () => {
             or sign up with email
           </p>
           <div className="flex-1 h-px bg-gray-300/90"></div>
+        </div>
+        {/* Image upload */}
+        <div className="w-full mb-4">
+          <input
+            onChange={handleImageUpload}
+            type="file"
+            {...register("image")}
+            accept="image/*"
+            className="file-input file-input-bordered w-full"
+            required
+          />
+        </div>
+        {/* Submit */}
+        {/* <button
+          type="submit"
+          className="mt-6 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity"
+          disabled={uploading}
+        >
+          {uploading ? "Uploading..." : "Sign Up"}
+        </button> */}
+        {/* Name Field */}
+        <div className="flex items-center w-full bg-transparent border border-gray-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2 m-6">
+          <input
+            type="text"
+            {...register("name")}
+            placeholder="Your Name"
+            className="bg-transparent text-gray-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full"
+            required
+          />
         </div>
         {/* Email input */}
         <div className="flex items-center w-full bg-transparent border border-gray-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2">

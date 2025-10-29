@@ -35,11 +35,26 @@ async function run() {
     const db = client.db("MoveXpress");
     const parcelCollection = db.collection("parcels");
     const paymentsCollection = db.collection("payments");
+    const usersCollection = db.collection("users");
     console.log("✅ Connected to MongoDB Database: MoveXpress");
 
     // Root route
     app.get("/", (req, res) => {
       res.send("🚚 MoveXpress API is running...");
+    });
+
+    app.post("/users", async (req, res) => {
+      const email = req.body.email;
+      const userExists = await usersCollection.findOne({ email });
+      if (userExists) {
+        // update last log in
+        return res
+          .status(200)
+          .send({ message: "User already exists", inserted: false });
+      }
+      const user = req.body;
+      const result = await usersCollection.insertOne(user);
+      res.send(result);
     });
 
     // Get all parcels
@@ -136,6 +151,45 @@ async function run() {
       } catch (error) {
         console.error("Error deleting parcel:", error);
         res.status(500).send({ message: "Failed to delete parcel" });
+      }
+    });
+
+    app.post("/tracking", async (req, res) => {
+      const {
+        tracking_id,
+        parcel_id,
+        status,
+        message,
+        updated_by = "",
+      } = req.body;
+
+      const log = {
+        tracking_id,
+        parcel_id: parcel_id ? new ObjectId(parcel_id) : undefined,
+        status,
+        message,
+        time: new Date(),
+        updated_by,
+      };
+
+      const result = await trackingCollection.insertOne(log);
+      res.send({ success: true, insertedId: result.insertedId });
+    });
+
+    app.get("/payments", async (req, res) => {
+      try {
+        const userEmail = req.query.email;
+
+        const query = userEmail ? { email: userEmail } : {};
+        const options = { sort: { paid_at: -1 } }; // Latest first
+
+        const payments = await paymentsCollection
+          .find(query, options)
+          .toArray();
+        res.send(payments);
+      } catch (error) {
+        console.error("Error fetching payment history:", error);
+        res.status(500).send({ message: "Failed to get payments" });
       }
     });
 

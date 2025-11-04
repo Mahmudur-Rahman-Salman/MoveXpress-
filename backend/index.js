@@ -5,16 +5,33 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { MongoClient, ObjectId, ServerApiVersion } from "mongodb";
 import Stripe from "stripe";
+import fs from "fs"; // ✅ Add this line
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
+// const admin = require("firebase-admin");
+
+import admin from "firebase-admin";
+
+// ✅ Load Firebase service account JSON safely
+const serviceAccount = JSON.parse(
+  fs.readFileSync(new URL("./firebase-admin-key.json", import.meta.url))
+);
 
 // middleware
 app.use(cors());
 app.use(express.json());
 
 const stripe = new Stripe(process.env.PAYMENT_GATEWAY_KEY);
+
+// Firebase admin server connected
+
+// const serviceAccount = require("./firebase-admin-key.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
 // MongoDB Connection
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.cf70q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -38,6 +55,29 @@ async function run() {
     const usersCollection = db.collection("users");
     console.log("✅ Connected to MongoDB Database: MoveXpress");
 
+    // middleware for verifying JWT can be added here
+    const verifyFirebaseToken = async (req, res, next) => {
+      // console.log("Header in middlewares: ", req.headers);
+      const authHeader = req.headers.authorization || req.headers.Authorization;
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).send({ message: "unauthorized access" });
+      }
+
+      const token = authHeader.split(" ")[1];
+      if (!token) {
+        return res.status(401).send({ message: "unauthorized access" });
+      }
+
+      // verify the token
+      try {
+        const decoded = await admin.auth().verifyIdToken(token);
+        req.decoded = decoded;
+        next();
+      } catch (error) {
+        return res.status(403).send({ message: "forbidden access" });
+      }
+    };
+
     // Root route
     app.get("/", (req, res) => {
       res.send("🚚 MoveXpress API is running...");
@@ -58,17 +98,17 @@ async function run() {
     });
 
     // Get all parcels
-    app.get("/parcels", async (req, res) => {
-      try {
-        const parcels = await parcelCollection.find().toArray();
-        res.send(parcels);
-      } catch (error) {
-        console.error("Error fetching parcels:", error);
-        res.status(500).send({ message: "Failed to fetch parcels" });
-      }
-    });
+    // app.get("/parcels", async (req, res) => {
+    //   try {
+    //     const parcels = await parcelCollection.find().toArray();
+    //     res.send(parcels);
+    //   } catch (error) {
+    //     console.error("Error fetching parcels:", error);
+    //     res.status(500).send({ message: "Failed to fetch parcels" });
+    //   }
+    // });
 
-    app.get("/parcels", async (req, res) => {
+    app.get("/parcels", verifyFirebaseToken, async (req, res) => {
       try {
         const userEmail = req.query.email;
 
@@ -176,9 +216,13 @@ async function run() {
       res.send({ success: true, insertedId: result.insertedId });
     });
 
-    app.get("/payments", async (req, res) => {
+    app.get("/payments", verifyFirebaseToken, async (req, res) => {
       try {
         const userEmail = req.query.email;
+
+        if (req.decoded.email !== userEmail) {
+          return res.status(403).send({ message: "forbidden access" });
+        }
 
         const query = userEmail ? { email: userEmail } : {};
         const options = { sort: { paid_at: -1 } }; // Latest first

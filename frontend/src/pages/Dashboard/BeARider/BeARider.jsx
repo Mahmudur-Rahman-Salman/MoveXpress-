@@ -63,8 +63,10 @@ const BeARider = () => {
             type="text"
             value={user?.displayName || ""}
             readOnly
+            placeholder="name"
             className="input input-bordered text-black w-full bg-gray-100"
           />
+          
 
           {/* Email (read-only) */}
           <input

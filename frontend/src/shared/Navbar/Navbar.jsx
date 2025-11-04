@@ -59,12 +59,19 @@ const Navbar = () => {
                   <Link to="/dashboard">Dashboard</Link>
                 </li>
               )}
+
+              <li>
+                <Link to="/bearider">Be A Rider</Link>
+              </li>
             </ul>
           </div>
         </div>
         <div className="navbar-center">
           {/* <a className="btn btn-ghost text-xl">MoveXpress</a> */}
-          <Link to="/" className="font-extrabold text-xl m-3 p-3 hover:bg-gray-100 ">
+          <Link
+            to="/"
+            className="font-extrabold text-xl m-3 p-3 hover:bg-gray-100 "
+          >
             Move<span className="text-amber-400">Xpress</span>
           </Link>
         </div>

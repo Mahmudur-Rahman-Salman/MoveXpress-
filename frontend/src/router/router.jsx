@@ -12,7 +12,7 @@ import MyParcels from "../pages/Dashboard/MyParcels/MyParcels";
 import Payment from "../pages/Dashboard/Payment/Payment";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import TrackParcel from "../pages/Dashboard/TrackParcel/TrackParcel";
-
+import BeARider from "../pages/Dashboard/BeARider/BeARider";
 
 export const router = createBrowserRouter([
   {
@@ -29,12 +29,23 @@ export const router = createBrowserRouter([
         loader: () => fetch("./warehouses.json"),
       },
       {
+        path: "BeARider",
+        element: (
+          <PrivateRoute>
+            <BeARider></BeARider>
+          </PrivateRoute>
+        ),
+        loader: () => fetch("./warehouses.json"),
+      },
+
+      {
         path: "sendparcel",
         element: (
           <PrivateRoute>
             <SendParcel></SendParcel>
           </PrivateRoute>
         ),
+        loader: () => fetch("./warehouses.json"),
       },
     ],
   },
@@ -62,20 +73,20 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "myparcels",
-        Component: MyParcels
-      }, 
+        Component: MyParcels,
+      },
       {
-        path: "payment/:parcelId", 
+        path: "payment/:parcelId",
         Component: Payment,
-      }, 
+      },
       {
         path: "paymentHistory",
-        Component: PaymentHistory
-      }, 
+        Component: PaymentHistory,
+      },
       {
         path: "track",
-        Component: TrackParcel
-      }
+        Component: TrackParcel,
+      },
     ],
   },
 ]);

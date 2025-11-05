@@ -6,6 +6,8 @@ import {
   FaMoneyCheckAlt,
   FaMapMarkedAlt,
   FaUserEdit,
+  FaUserCheck,
+  FaUserClock,
 } from "react-icons/fa";
 
 const DashboardLayout = () => {
@@ -83,7 +85,19 @@ const DashboardLayout = () => {
                 Update Profile
               </Link>
             </li>
-             
+            {/* riders link */}
+            <li>
+              <Link to="/dashboard/active-riders">
+                <FaUserCheck className="inline-block mr-2" />
+                Active Riders
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard/pending-riders">
+                <FaUserClock className="inline-block mr-2" />
+                Pending Riders
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

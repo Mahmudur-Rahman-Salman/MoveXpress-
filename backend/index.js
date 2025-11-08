@@ -153,8 +153,8 @@ async function run() {
 
     app.patch(
       "/users/:id/role",
-      // verifyFirebaseToken,
-      // verifyAdmin,
+      verifyFirebaseToken,
+      verifyAdmin,
       async (req, res) => {
         const { id } = req.params;
         const { role } = req.body;
@@ -281,25 +281,35 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/riders/pending", async (req, res) => {
-      try {
-        const pendingRiders = await ridersCollection
-          .find({ status: "pending" })
-          .toArray();
+    app.get(
+      "/riders/pending",
+      verifyFirebaseToken,
+      verifyAdmin,
+      async (req, res) => {
+        try {
+          const pendingRiders = await ridersCollection
+            .find({ status: "pending" })
+            .toArray();
 
-        res.send(pendingRiders);
-      } catch (error) {
-        console.error("Failed to load pending riders:", error);
-        res.status(500).send({ message: "Failed to load pending riders" });
+          res.send(pendingRiders);
+        } catch (error) {
+          console.error("Failed to load pending riders:", error);
+          res.status(500).send({ message: "Failed to load pending riders" });
+        }
       }
-    });
+    );
 
-    app.get("/riders/active", async (req, res) => {
-      const result = await ridersCollection
-        .find({ status: "active" })
-        .toArray();
-      res.send(result);
-    });
+    app.get(
+      "/riders/active",
+      verifyFirebaseToken,
+      verifyAdmin,
+      async (req, res) => {
+        const result = await ridersCollection
+          .find({ status: "active" })
+          .toArray();
+        res.send(result);
+      }
+    );
 
     app.patch("/riders/:id/status", async (req, res) => {
       const { id } = req.params;

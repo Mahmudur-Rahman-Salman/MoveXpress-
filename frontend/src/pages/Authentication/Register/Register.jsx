@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import axios from "axios";
 import useAxios from "../../../hooks/useAxios";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const {
@@ -18,6 +19,11 @@ const Register = () => {
 
   const [profilePic, setProfilePic] = useState("");
   const axiosInstance = useAxios();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Redirect path (where user came from or default "/")
+  const from = location.state?.from?.pathname || "/";
 
   const onSubmit = (data) => {
     // console.log(data);
@@ -45,6 +51,19 @@ const Register = () => {
         updateUserProfile(userProfile)
           .then(() => {
             console.log("Profile updated successfully");
+            // ✅ Show success popup
+            Swal.fire({
+              icon: "success",
+              title: "Registration Successful!",
+              text: "Welcome to MoveXpress 🎉",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            // ✅ Redirect after short delay
+            setTimeout(() => {
+              navigate(from, { replace: true }); // redirect to home page (or '/dashboard' if you prefer)
+            }, 1500);
           })
           .catch((error) => {
             console.log("Error updating profile:", error);
@@ -52,6 +71,12 @@ const Register = () => {
       })
       .catch((error) => {
         console.log(error.message);
+        // ❌ Show error popup if registration fails
+        Swal.fire({
+          icon: "error",
+          title: "Registration Failed",
+          text: error.message,
+        });
       });
   };
 

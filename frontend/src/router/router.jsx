@@ -15,7 +15,9 @@ import TrackParcel from "../pages/Dashboard/TrackParcel/TrackParcel";
 import PendingRiders from "../pages/Dashboard/PendingRiders/PendingRiders";
 import BeARider from "../pages/Dashboard/BeARider/BeARider";
 import ActiveRiders from "../pages/Dashboard/ActiveRiders/ActiveRiders";
-
+import MakeAdmin from "../pages/Dashboard/MakeAdmin/MakeAdmin";
+import Forbidden from "../pages/Forbidden/Forbidden";
+import AdminRoute from "../routes/AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +32,10 @@ export const router = createBrowserRouter([
         path: "coverage",
         Component: Coverage,
         loader: () => fetch("./warehouses.json"),
+      },
+      {
+        path: "forbidden",
+        Component: Forbidden,
       },
       {
         path: "BeARider",
@@ -91,13 +97,22 @@ export const router = createBrowserRouter([
         Component: TrackParcel,
       },
       {
-        path: "pending-riders", 
+        path: "pending-riders",
         Component: PendingRiders,
-      }, 
+      },
       {
         path: "active-riders",
         Component: ActiveRiders,
-      }
+      },
+      {
+        path: "makeAdmin",
+
+        element: (
+          <AdminRoute>
+            <MakeAdmin></MakeAdmin>
+          </AdminRoute>
+        ),
+      },
     ],
   },
 ]);

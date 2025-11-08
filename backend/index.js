@@ -79,6 +79,59 @@ async function run() {
       }
     };
 
+    const verifyAdmin = async (req, res, next) => {
+      const email = req.decoded.email;
+      const query = { email };
+      const user = await usersCollection.findOne(query);
+      if (!user || user.role !== "admin") {
+        return res.status(403).send({ message: "forbidden access" });
+      }
+      next();
+    };
+
+    app.get("/users/search", async (req, res) => {
+      const emailQuery = req.query.email;
+      if (!emailQuery) {
+        return res.status(400).send({ message: "Missing email query" });
+      }
+
+      const regex = new RegExp(emailQuery, "i"); // case-insensitive partial match
+
+      try {
+        const users = await usersCollection
+          .find({ email: { $regex: regex } })
+          // .project({ email: 1, createdAt: 1, role: 1 })
+          .limit(10)
+          .toArray();
+        res.send(users);
+      } catch (error) {
+        console.error("Error searching users", error);
+        res.status(500).send({ message: "Error searching users" });
+      }
+    });
+
+    // GET: Get user role by email
+    app.get("/users/:email/role", async (req, res) => {
+      try {
+        const email = req.params.email;
+
+        if (!email) {
+          return res.status(400).send({ message: "Email is required" });
+        }
+
+        const user = await usersCollection.findOne({ email });
+
+        if (!user) {
+          return res.status(404).send({ message: "User not found" });
+        }
+
+        res.send({ role: user.role || "user" });
+      } catch (error) {
+        console.error("Error getting user role:", error);
+        res.status(500).send({ message: "Failed to get role" });
+      }
+    });
+
     // Root route
     app.get("/", (req, res) => {
       res.send("🚚 MoveXpress API is running...");
@@ -97,6 +150,31 @@ async function run() {
       const result = await usersCollection.insertOne(user);
       res.send(result);
     });
+
+    app.patch(
+      "/users/:id/role",
+      // verifyFirebaseToken,
+      // verifyAdmin,
+      async (req, res) => {
+        const { id } = req.params;
+        const { role } = req.body;
+
+        if (!["admin", "user"].includes(role)) {
+          return res.status(400).send({ message: "Invalid role" });
+        }
+
+        try {
+          const result = await usersCollection.updateOne(
+            { _id: new ObjectId(id) },
+            { $set: { role } }
+          );
+          res.send({ message: `User role updated to ${role}`, result });
+        } catch (error) {
+          console.error("Error updating user role", error);
+          res.status(500).send({ message: "Failed to update user role" });
+        }
+      }
+    );
 
     // Get all parcels
     // app.get("/parcels", async (req, res) => {
@@ -225,7 +303,7 @@ async function run() {
 
     app.patch("/riders/:id/status", async (req, res) => {
       const { id } = req.params;
-      const { status } = req.body;
+      const { status, email } = req.body;
       const query = { _id: new ObjectId(id) };
       const updateDoc = {
         $set: {
@@ -235,6 +313,21 @@ async function run() {
 
       try {
         const result = await ridersCollection.updateOne(query, updateDoc);
+        // update user role for accepting rider
+        if (status === "active") {
+          const userQuery = { email };
+          const userUpdateDoc = {
+            $set: {
+              role: "rider",
+            },
+          };
+          const roleResult = await usersCollection.updateOne(
+            userQuery,
+            userUpdateDoc
+          );
+          console.log(roleResult.modifiedCount);
+        }
+
         res.send(result);
       } catch (err) {
         res.status(500).send({ message: "Failed to update rider status" });

@@ -8,9 +8,14 @@ import {
   FaUserEdit,
   FaUserCheck,
   FaUserClock,
+  FaUserShield,
 } from "react-icons/fa";
+import UseUserRole from "../hooks/UseUserRole";
 
 const DashboardLayout = () => {
+  const { role, roleLoading } = UseUserRole();
+  console.log(role);
+
   return (
     <div>
       <div className="drawer lg:drawer-open">
@@ -85,19 +90,30 @@ const DashboardLayout = () => {
                 Update Profile
               </Link>
             </li>
-            {/* riders link */}
-            <li>
-              <Link to="/dashboard/active-riders">
-                <FaUserCheck className="inline-block mr-2" />
-                Active Riders
-              </Link>
-            </li>
-            <li>
-              <Link to="/dashboard/pending-riders">
-                <FaUserClock className="inline-block mr-2" />
-                Pending Riders
-              </Link>
-            </li>
+            {!roleLoading && role === "admin" && (
+              <>
+                {/* riders link */}
+                <li>
+                  <Link to="/dashboard/active-riders">
+                    <FaUserCheck className="inline-block mr-2" />
+                    Active Riders
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/dashboard/pending-riders">
+                    <FaUserClock className="inline-block mr-2" />
+                    Pending Riders
+                  </Link>
+                </li>
+                {/* admin */}
+                <li>
+                  <Link to="/dashboard/makeAdmin">
+                    <FaUserShield className="inline-block mr-2" />
+                    Make Admin
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

@@ -129,6 +129,7 @@ const Login = () => {
           Don’t have an account?{" "}
           <Link
             to="/register"
+            state={{from}}
             className="text-indigo-500 hover:underline"
             href="#"
           >
